@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Colors from "../Themes/Colors.js";
+import LoginActions from "../Redux/LoginRedux"
 
 const Container = styled.div`
   background-color: ${Colors.backgroundBlack};
@@ -54,11 +55,14 @@ class Login extends Component {
     let userName = document.getElementById("userName").value;
     let password = document.getElementById("password").value;
     if (userName === "Dairymaid" && password === "54stupi#") {
+
       this.props.history.push("/dashboard");
-    }else if(userName === "demo" && password === "demo"){
+    } else if (userName === "demo" && password === "demo") {
       //to do write demo
-    }else if(userName === "admin" && password === "admin"){
+    } else if (userName === "admin" && password === "admin") {
       this.props.history.push("/admin");
+    } else {
+      alert("wrong")
     }
   }
 
@@ -89,6 +93,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    loginSuccess: (companyId, displayName) => dispatch(LoginActions.loginSuccess(companyId, displayName))
   };
 };
 

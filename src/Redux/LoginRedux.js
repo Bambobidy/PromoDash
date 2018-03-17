@@ -5,7 +5,7 @@ import Immutable from 'seamless-immutable'
 
 const { Types, Creators } = createActions({
   loginRequest: ['userName', 'password'],
-  loginSuccess: ['companyId']
+  loginSuccess: ['companyId', 'displayName']
 })
 
 export const LoginTypes = Types
@@ -17,14 +17,15 @@ export const INITIAL_STATE = Immutable({
   userName: '',
   password: '',
   fetching: false,
-  companyId:''
+  companyId:'',
+  displayName:'DairyMaid',
 })
 
 /* ------------- Reducers ------------- */
 
 export const loginRequest = (state, { userName, password }) => state.merge({ fetching: true})
 
-export const loginSuccess = (state, { companyId }) => state.merge({ fetching: false, companyId })
+export const loginSuccess = (state, { companyId, displayName }) => state.merge({ fetching: false, companyId, displayName })
 
 /* ------------- Hookup Reducers To Types ------------- */
 
