@@ -2,69 +2,70 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import Colors from "../Themes/Colors.js";
-import LoginActions from "../Redux/LoginRedux"
+import { Metrics, Colors } from "../Themes";
+import LoginActions from "../Redux/LoginRedux";
 
 const Container = styled.div`
-  background-color: ${Colors.backgroundBlack};
-  display:flex;
-  flex-direction:column;
-  width:100%;
-  height:100%;
-  justify-content:center;
+  background-color: ${Colors.background};
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
   align-items: center;
 `;
 
 const LoginForm = styled.div`
-  background-color: white;
-  width:300px;
-  height:300px;
-  border-radius: 5px;
-  p, Input, Button{
-    margin:12px;
+  background-color: ${Colors.inverseTextColor};
+  width: ${Metrics.loginFormWidth};
+  height: ${Metrics.loginFormWidth};
+  border-radius: ${Metrics.padding};
+  p,
+  input,
+  button {
+    margin: ${Metrics.padding};
   }
 `;
 
 const Input = styled.input`
   display: block;
-  width: 245px;
-  padding: .375rem .75rem;
+  width: ${Metrics.inputWidth};
+  padding: 0.375rem 0.75rem;
   font-size: 1rem;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 `;
 
 const Button = styled.button`
-  width:270px;
-  color: #fff;
-  background-color: #007bff;
+  width: ${Metrics.buttonWidth};
+  color: ${Colors.inverseTextColor};
+  background-color: ${Colors.buttonColor};
   border: 1px solid transparent;
-  padding: .375rem .75rem;
+  padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   &:hover {
     cursor: pointer;
-    background-color: #0069d9;
-    border-color: #0062cc;
+    background-color: ${Colors.buttonHover};
+    border-color: ${Colors.buttonHoverBorder};
   }
 `;
 
 class Login extends Component {
-  login() {
-    let userName = document.getElementById("userName").value;
-    let password = document.getElementById("password").value;
+  login = () => {
+    const userName = document.getElementById("userName").value;
+    const password = document.getElementById("password").value;
     if (userName === "Dairymaid" && password === "54stupi#") {
-
       this.props.history.push("/dashboard");
     } else if (userName === "demo" && password === "demo") {
       //to do write demo
     } else if (userName === "admin" && password === "admin") {
       this.props.history.push("/admin");
     } else {
-      alert("wrong")
+      alert("wrong");
     }
-  }
+  };
 
   render() {
     return (
@@ -77,9 +78,7 @@ class Login extends Component {
           <p>login</p>
           <Input id="password" type="text" placeholder="Password" />
           <br />
-          <Button onClick={() => this.login()}>
-            Login
-          </Button>
+          <Button onClick={this.login}>Login</Button>
         </LoginForm>
       </Container>
     );
@@ -87,13 +86,13 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginSuccess: (companyId, displayName) => dispatch(LoginActions.loginSuccess(companyId, displayName))
+    loginSuccess: (companyId, displayName) =>
+      dispatch(LoginActions.loginSuccess(companyId, displayName))
   };
 };
 
