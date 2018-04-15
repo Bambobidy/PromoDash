@@ -20,20 +20,59 @@ const Links = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  @media only screen and (max-width: ${Metrics.tabletView}) {
+    display: none;
+  }
+`;
+
+const Hamburger = styled.button`
+  background-color: ${Colors.background};
+  margin-bottom: 20px;
+  border: none;
+  align-self: flex-end;
+  outline: none;
+  @media only screen and (min-width: ${Metrics.tabletView}) {
+    display: none;
+  }
+  .__icon {
+    .__burger {
+      hr {
+        width: 30px;
+        border: solid 1px ${Colors.inverseTextColor};
+        transition: all 0.1s ease;
+      }
+    }
+
+    &.__toggle {
+      .__burger {
+        hr:first-of-type {
+          transform: rotate(45deg);
+          transform-origin: center center;
+        }
+        hr:nth-of-type(even) {
+          display: none;
+        }
+        hr:last-of-type {
+          transform: rotate(-45deg) translateY(-5px) translateX(6px);
+          transform-origin: center center;
+        }
+      }
+    }
+  }
 `;
 
 const Logo = styled.div`
-  display:flex;
+  display: flex;
   img {
     width: ${Metrics.images.logoWidth};
     height: ${Metrics.images.logoWidth};
   }
-  div{
-    font-family: 'Indie Flower',cursive;
+  div {
+    font-family: "Indie Flower", cursive;
     color: ${Colors.logo};
     font-size: 2rem;
     margin: ${Metrics.smallPadding};
-    font-weight: bolder;}
+    font-weight: bolder;
   }
 `;
 
@@ -54,6 +93,9 @@ const Wrapper = styled.div`
 `;
 
 class Header extends Component {
+  state = {
+    menu: false
+  };
   render() {
     return (
       <Wrapper>
@@ -73,6 +115,15 @@ class Header extends Component {
               <i className="fa fa-fw fa-sign-out" />Logout
             </Link>
           </Links>
+          <Hamburger onClick={() => this.setState({ menu: !this.state.menu })}>
+            <div className={this.state.menu ? "__icon __toggle" : "__icon"}>
+              <div className="__burger">
+                <hr />
+                <hr />
+                <hr />
+              </div>
+            </div>
+          </Hamburger>
         </Nav>
       </Wrapper>
     );

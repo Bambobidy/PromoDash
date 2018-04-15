@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Metrics, Colors } from "../Themes";
 
 const SideBarContainer = styled.div`
-  height: 100%;
   background-color: ${Colors.background};
   width: ${Metrics.sideBarWidth};
   i {
@@ -17,6 +16,9 @@ const SideBarContainer = styled.div`
       color: ${Colors.iconHover};
       cursor: pointer;
     }
+  }
+  @media only screen and (max-width: ${Metrics.tabletView}) {
+    display:none;
   }
 `;
 

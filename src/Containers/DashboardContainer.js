@@ -2,20 +2,24 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { Metrics, Colors } from "../Themes";
+import metrics, { Metrics, Colors } from "../Themes";
 import Header from "../Components/Header";
 import SideBar from "../Components/SideBar";
-import { Active, InActive, Status1, Status2, Status3, Status4, Status5 } from "../Images"
-import C3Chart from "c3-react";
-
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-`;
+import {
+  InActive,
+  Status1,
+  Status2,
+  Status3,
+  Status4,
+  Status5
+} from "../Images";
+import C3Chart from "react-c3js";
+import "c3/c3.css";
+import shop from "../Images/shop.png";
+import feet from "../Images/feet.png";
+import Body from "../Components/Body";
 
 const Content = styled.div`
-  height: 100%;
   width: 100%;
   background-color: ${Colors.background};
   padding-left: ${Metrics.doublePadding};
@@ -51,17 +55,91 @@ const Billboard = styled.div`
   background-image: url(${Status1});
   background-size: 100%;
   margin-bottom: 2%;
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    height: 400px;
+    flex-direction: column;
+  }
 `;
 
 const GraphContainer = styled.div`
   display: flex;
-  justify-content: row;
+  justify-content: space-between;
+  margin-top: ${Metrics.doublePadding};
+  .c3-legend-item {
+    fill: white;
+  }
+
+  .c3 .c3-axis-y path {
+    stroke: #aaa;
+  }
+
+  .c3 .c3-axis-y line {
+    stroke: #aaa;
+  }
+
+  .c3 .c3-axis-x path {
+    stroke: #aaa;
+  }
+  .c3 .c3-axis-x line {
+    stroke: #aaa;
+  }
+
+  .c3-axis-y text {
+    fill: #7e7e7d;
+    font-size: 12px;
+  }
+  .c3-axis-x text {
+    font-size: 12px;
+    fill: #7e7e7d;
+  }
+  @media only screen and (max-width: ${Metrics.phoneView}){
+    flex-direction:column;
+  }
+`;
+
+const Graph = styled.div`
+  width: 30%;
+  text-align: center;
+  h3 {
+    color: ${Colors.inverseTextColor};
+    margin-bottom: ${Metrics.doublePadding};
+    font-size: 1.5rem;
+  }
+  h4 {
+    color: #7e7e7d;
+    font-size: 1.3rem;
+  }
+  .__header{
+    height: 100px;
+  }
+  @media only screen and (max-width: ${Metrics.phoneView}){
+    width: 100%
+  }
 `;
 
 const Icons = styled.div`
   height: 100%;
   width: ${Metrics.loginFormWidth};
   border: 1px solid ${Colors.inverseTextColor};
+  display: flex;
+  .__half {
+    width: 50%;
+    img {
+      width: 85%;
+      height: 70%;
+    }
+    h2 {
+      font-size: 6rem;
+      margin: 15px 0;
+    }
+    p {
+      color: ${Colors.inverseTextColor};
+      margin-left: 20px;
+    }
+  }
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    height: auto;
+  }
 `;
 
 const StatusRow = styled.div`
@@ -78,62 +156,38 @@ const Status = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  img{
+  img {
     height: 200%;
     width: 20px;
   }
 `;
 
+const SalesPercent = ({ data }) => (
+  <C3Chart data={{ json: data, type: "donut" }} />
+);
+
+const SalesChart = ({ data }) => (
+  <C3Chart data={{ json: data, type: "line" }} />
+);
+
+const StockChart = ({ data }) => (
+  <C3Chart data={{ json: data, type: "line" }} />
+);
+
+const chartData = {
+  line: {
+    data1: [30, 20, 50, 40, 60, 50],
+    data2: [200, 130, 90, 240, 130, 220],
+    data3: [300, 200, 160, 400, 250, 250]
+  },
+  bar: {
+    data1: [30, 200, 100, 400, 150, 250],
+    data2: [130, 100, 140, 200, 150, 50]
+  }
+};
+
 class Dashboard extends Component {
   render() {
-    let data = [
-      {
-        key: "dataSource1",
-        values: [
-          {label: "A", value: 3},
-          {label: "B", value: 4}
-        ]
-      },
-      {
-        key: "dataSource2",
-        values: [
-          {label: "X", value: 7},
-          {label: "Y", value: 8}
-        ]
-      }
-    ];
-
-    let type = "bar";
-
-    let options = {
-      padding: {
-        top: 20,
-        bottom: 20,
-        left: 40,
-        right: 10
-      },
-      size: {
-        width: 800,
-        height: 600
-      },
-      subchart: true,
-      zoom: true,
-      grid: {
-        x: false,
-        y: true
-      },
-      labels: true,
-      axisLabel: {
-        x: "product",
-        y: "quantity"
-      },
-      onClick: function(d) {
-        let categories = this.categories(); //c3 function, get categorical labels
-        console.log(d);
-        console.log("you clicked {" + d.name + ": " + categories[d.x] + ": " + d.value + "}");
-      }
-    };
-
     return (
       <div>
         <Header />
@@ -146,8 +200,24 @@ class Dashboard extends Component {
             </h1>
             <h2>PROMOTION STATUS</h2>
             <Billboard>
-              <Icons />
-              <Icons />
+              <Icons>
+                <div className="__half">
+                  <img src={shop} alt="Shopping" />
+                  <p>Sales/Hour</p>
+                </div>
+                <div className="__half">
+                  <h2>0</h2>
+                </div>
+              </Icons>
+              <Icons>
+                <div className="__half">
+                  <img src={feet} alt="Foot traffic" />
+                  <p>Foot traffic/Hour</p>
+                </div>
+                <div className="__half">
+                  <h2>0</h2>
+                </div>
+              </Icons>
             </Billboard>
             <StatusRow>
               <Status image={Status1}>
@@ -166,8 +236,38 @@ class Dashboard extends Component {
                 <img src={InActive} alt="status5" />
               </Status>
             </StatusRow>
+            {/* <GraphContainer>
+              <GraphHeader>
+                <h3>Store Sales %</h3>
+                <h4>Select the store that you're interested in</h4>
+              </GraphHeader>
+              <GraphHeader>
+                <h3>Sales</h3>
+              </GraphHeader>
+              <GraphHeader>
+                <h3>Stock</h3>
+              </GraphHeader>
+            </GraphContainer> */}
             <GraphContainer>
-              <C3Chart data={data} type="bar" options={options} />
+              <Graph>
+                <div className="__header">
+                  <h3>Store Sales %</h3>
+                  <h4>Select the store that you're interested in</h4>
+                </div>
+                <SalesPercent data={chartData.line} />
+              </Graph>
+              <Graph>
+                <div className="__header">
+                  <h3>Sales</h3>
+                </div>
+                <SalesChart data={chartData.line} />
+              </Graph>
+              <Graph>
+                <div className="__header">
+                  <h3>Stock</h3>
+                </div>
+                <StockChart data={chartData.line} />
+              </Graph>
             </GraphContainer>
           </Content>
         </Body>
