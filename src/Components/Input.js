@@ -9,6 +9,9 @@ const Input = styled.input`
   font-size: 1rem;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    width: 200px;
+  }
 `;
 
 export default Input;

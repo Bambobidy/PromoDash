@@ -71,14 +71,30 @@ const Content = styled.div`
   .__show {
     display: block;
   }
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    padding: 0 20px;
+    flex-direction: column;
+    h1 {
+      font-size: 2rem;
+      i {
+        font-size: 2rem;
+      }
+    }
+    .__column {
+      flex-direction: column;
+    }
+  }
 `;
 
 const Line = styled.div`
   width: ${props => props.width || "250px"};
   margin: 10px 10px;
-  background-color: ${Colors.logo};
+  background-color: ${props => props.color || Colors.logo};
   height: 1px;
   border: 0;
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    width: 200px;
+  }
 `;
 
 class Product extends Component {
@@ -222,7 +238,7 @@ class Product extends Component {
               <h1>
                 Company<i className="fa fa-save" />
               </h1>
-              <div className="__flex">
+              <div className="__flex __column">
                 <Input
                   id="companyInput"
                   type="text"
@@ -248,24 +264,27 @@ class Product extends Component {
               <Line width="550px" />
               {this.state.company.map((currElement, index) => (
                 <div className="__flex">
-                  <Input
-                    value={currElement[0]}
-                    key={index}
-                    type="text"
-                    placeholder="name of store"
-                  />
-                  <Input
-                    value={currElement[1]}
-                    key={index}
-                    type="text"
-                    placeholder="product range"
-                  />
-                  <Input
-                    value={currElement[2]}
-                    key={index}
-                    type="text"
-                    placeholder="password"
-                  />
+                  <div className="__column">
+                    <Input
+                      value={currElement[0]}
+                      key={index}
+                      type="text"
+                      placeholder="name of store"
+                    />
+                    <Input
+                      value={currElement[1]}
+                      key={index}
+                      type="text"
+                      placeholder="product range"
+                    />
+                    <Input
+                      value={currElement[2]}
+                      key={index}
+                      type="text"
+                      placeholder="password"
+                    />
+                    <Line color="#5f8976" />
+                  </div>
                   <i
                     className="fa fa-trash"
                     onClick={() =>
