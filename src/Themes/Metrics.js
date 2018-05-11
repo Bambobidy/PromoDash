@@ -2,6 +2,7 @@ const metrics = {
 
   tabletView: "935px",
   phoneView: "767px",
+  thirdScreenView: "1145px",
 
   loginFormWidth: "300px",
   padding: "10px",

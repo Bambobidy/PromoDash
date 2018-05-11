@@ -15,6 +15,7 @@ const Content = styled.div`
   padding-left: ${Metrics.doublePadding};
   padding-right: ${Metrics.doublePadding};
   display: flex;
+  justify-content: space-evenly;
   .__flex {
     display: flex;
     margin: -10px 0;
@@ -39,12 +40,6 @@ const Content = styled.div`
       cursor: pointer;
       color: #ffffff80;
     }
-  }
-  hr {
-    margin: 20px 100px;
-    background-color: ${Colors.logo};
-    border: 0;
-    width: 1px;
   }
   .__dropDown {
     display: none;
@@ -71,9 +66,11 @@ const Content = styled.div`
   .__show {
     display: block;
   }
-  @media only screen and (max-width: ${Metrics.phoneView}) {
+  @media only screen and (max-width: ${Metrics.tabletView}) {
     padding: 0 20px;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     h1 {
       font-size: 2rem;
       i {
@@ -92,7 +89,7 @@ const Line = styled.div`
   background-color: ${props => props.color || Colors.logo};
   height: 1px;
   border: 0;
-  @media only screen and (max-width: ${Metrics.phoneView}) {
+  @media only screen and (max-width: ${Metrics.tabletView}) {
     width: 200px;
   }
 `;
@@ -231,8 +228,6 @@ class Product extends Component {
                 }
               />
             </div>
-
-            <hr />
 
             <div>
               <h1>
