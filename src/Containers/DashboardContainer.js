@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import metrics, { Metrics, Colors } from "../Themes";
+import { Metrics, Colors } from "../Themes";
 import Header from "../Components/Header";
 import SideBar from "../Components/SideBar";
 import {
@@ -13,7 +13,8 @@ import {
   Status4,
   Status5
 } from "../Images";
-import C3Chart from "react-c3js";
+// import C3Chart from "react-c3js";
+import c3 from "c3";
 import "c3/c3.css";
 import shop from "../Images/shop.png";
 import feet from "../Images/feet.png";
@@ -92,8 +93,8 @@ const GraphContainer = styled.div`
     font-size: 12px;
     fill: #7e7e7d;
   }
-  @media only screen and (max-width: ${Metrics.phoneView}){
-    flex-direction:column;
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    flex-direction: column;
   }
 `;
 
@@ -109,11 +110,11 @@ const Graph = styled.div`
     color: #7e7e7d;
     font-size: 1.3rem;
   }
-  .__header{
+  .__header {
     height: 100px;
   }
-  @media only screen and (max-width: ${Metrics.phoneView}){
-    width: 100%
+  @media only screen and (max-width: ${Metrics.phoneView}) {
+    width: 100%;
   }
 `;
 
@@ -162,18 +163,6 @@ const Status = styled.div`
   }
 `;
 
-const SalesPercent = ({ data }) => (
-  <C3Chart data={{ json: data, type: "donut" }} />
-);
-
-const SalesChart = ({ data }) => (
-  <C3Chart data={{ json: data, type: "line" }} />
-);
-
-const StockChart = ({ data }) => (
-  <C3Chart data={{ json: data, type: "line" }} />
-);
-
 const chartData = {
   line: {
     data1: [30, 20, 50, 40, 60, 50],
@@ -187,6 +176,48 @@ const chartData = {
 };
 
 class Dashboard extends Component {
+  state = {
+    displayName: this.props.displayName
+  };
+
+  refreshDate = d => {
+    this.setState({ displayName: d.name });
+
+    this.salesPercent.load({
+      unload: true,
+      columns: [["data1", 100], ["data3", 200]]
+    });
+  };
+
+  renderChart = () => {
+    this.salesPercent = c3.generate({
+      bindto: "#salesPercent",
+      data: {
+        json: chartData.line,
+        type: "donut",
+        onclick: (d, i) => this.refreshDate(d)
+      }
+    });
+
+    this.salesChart = c3.generate({
+      bindto: "#salesChart",
+      data: {
+        json: chartData.line
+      }
+    });
+
+    this.stockChart = c3.generate({
+      bindto: "#stockChart",
+      data: {
+        json: chartData.line
+      }
+    });
+  };
+
+  componentDidMount = () => {
+    this.renderChart();
+  };
+
   render() {
     return (
       <div>
@@ -196,7 +227,7 @@ class Dashboard extends Component {
           <Content>
             <h1>
               Dashboard:
-              <span> {this.props.displayName}</span>
+              <span> {this.state.displayName}</span>
             </h1>
             <h2>PROMOTION STATUS</h2>
             <Billboard>
@@ -236,37 +267,25 @@ class Dashboard extends Component {
                 <img src={InActive} alt="status5" />
               </Status>
             </StatusRow>
-            {/* <GraphContainer>
-              <GraphHeader>
-                <h3>Store Sales %</h3>
-                <h4>Select the store that you're interested in</h4>
-              </GraphHeader>
-              <GraphHeader>
-                <h3>Sales</h3>
-              </GraphHeader>
-              <GraphHeader>
-                <h3>Stock</h3>
-              </GraphHeader>
-            </GraphContainer> */}
             <GraphContainer>
               <Graph>
                 <div className="__header">
                   <h3>Store Sales %</h3>
                   <h4>Select the store that you're interested in</h4>
                 </div>
-                <SalesPercent data={chartData.line} />
+                <div id="salesPercent" />
               </Graph>
               <Graph>
                 <div className="__header">
                   <h3>Sales</h3>
                 </div>
-                <SalesChart data={chartData.line} />
+                <div id="salesChart" />
               </Graph>
               <Graph>
                 <div className="__header">
                   <h3>Stock</h3>
                 </div>
-                <StockChart data={chartData.line} />
+                <div id="stockChart" />
               </Graph>
             </GraphContainer>
           </Content>
